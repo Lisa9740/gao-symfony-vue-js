@@ -1,6 +1,12 @@
 <template>
   <div>
-    <p>This is an example of a new components in VueJs</p>
+    <v-app>
+      <v-main>
+        <v-container>Hello world
+        <Computer />
+        </v-container>
+      </v-main>
+    </v-app>
   </div>
 </template>
 <script>
