@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Example from './Components/exemple.vue'
+import Example from './Components/home.vue'
 /**
  * Create a fresh Vue Application instance
  */

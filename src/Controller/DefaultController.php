@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/computers", name="computers_list")
+     * @Route("/api/computers", name="computers_list")
      */
     public function ComputerList(ComputerRepository $computerRepository, SerializerInterface $serializer)
     {
