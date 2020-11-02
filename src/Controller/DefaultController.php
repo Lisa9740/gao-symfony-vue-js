@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DefaultController extends AbstractController
 {
@@ -22,11 +23,11 @@ class DefaultController extends AbstractController
     /**
      * @Route("/computers", name="computers_list")
      */
-    public function ComputerIndex(ComputerRepository $computerRepository)
+    public function ComputerList(ComputerRepository $computerRepository, SerializerInterface $serializer)
     {
         $computers = $computerRepository->findAll();
-        $computers->serialize =
-        dump($computers);
-        return new JsonResponse($computers, Response::HTTP_OK);
+        $json = $serializer->serialize($computers, 'json');
+
+       return new Response($json);
     }
 }
