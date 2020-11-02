@@ -28,9 +28,14 @@ export default {
     ordinateur: {
       required: true
     },
-    // date: {
-    //   required: true
-    // },
+    date: {
+      required: true
+    },
+  },
+  data() {
+    return {
+      horaires: [],
+    }
   },
 
 }
