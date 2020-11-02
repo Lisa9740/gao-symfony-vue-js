@@ -2,8 +2,8 @@
   <v-card>
 
     <v-card-title>
-      gklfmdgk
-<!--      {{ ordinateur.name }}-->
+
+      {{ ordinateur.name }}
     </v-card-title>
 <!--    <v-card-text>-->
 <!--      <v-row v-for="(horaire, key) in horaires" :key="key">-->
@@ -22,3 +22,16 @@
 <!--    </v-card-text>-->
   </v-card>
 </template>
+<script>
+export default {
+  props: {
+    ordinateur: {
+      required: true
+    },
+    // date: {
+    //   required: true
+    // },
+  },
+
+}
+</script>
