@@ -49,7 +49,7 @@ export default {
   },
   methods : {
       initialise() {
-        console.log(this.ordinateur.attributions)
+        console.log(this.ordinateur)
           for (let i=0; i < this.ordinateur.attributions.length; i++) {
             let attribution = this.ordinateur.attributions[i]
             this.attributions[attribution.hour] = {
@@ -74,10 +74,10 @@ export default {
       this.ordinateur.attributions.push(attribution)
       this.initialise();
     },
-    removeAttribution: function(horaire){
-      _.unset(this.attributions,horaire)
-      this.buildHoraires();
-    }
+    // removeAttribution: function(horaire){
+    //   _.unset(this.attributions,horaire)
+    //   this.buildHoraires();
+    // }
   }
 }
 </script>

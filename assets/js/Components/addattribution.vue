@@ -18,7 +18,7 @@
         <v-container>
           <v-row v-if="!ajouter">
             <v-col cols="12" md="6" sm="8">
-              <v-autocomplete :loading="loading" :items="clients" :search-input.sync="search" v-model="client" item-text="composed" return-object cache-items hide-no-data hide-details label="Sélection le client">
+              <v-autocomplete :loading="loading" :items="clients" :search-input.sync="search" v-model="client" item-text="name" return-object cache-items hide-no-data hide-details label="Sélection le client">
               </v-autocomplete>
             </v-col>
           </v-row>
@@ -67,7 +67,6 @@ export default {
       ajouter: false,
       client: {},
       dialog: false,
-
       //
       loading: false,
       search: null,
@@ -79,15 +78,13 @@ export default {
   },
 
   watch: {
-
     search: function (val) {
       if (val && val.length > 1) {
-
         this.loading = true
-        axios.get('/api/customer/search', { params: { query: val } })
+        axios.get('/api/customers/search', { params: { query: val } })
             .then(({ data }) => {
               this.loading = false;
-              data.data.forEach(client => {
+              data.forEach(client => {
                 this.clients.push(this.formattedClient(client))
               });
 
@@ -105,9 +102,9 @@ export default {
 
     attribuer: function () {
       if (this.isValid()) {
-        axios.post('/api/attributions/', this.theCustomer())
+        axios.post('/api/attributions', this.theCustomer())
             .then(({ data }) => {
-              this.$emit('addAttribution', data.data)
+              this.$emit('addAttribution', data)
               this.dialog = false
             })
             .catch(error => {
@@ -119,26 +116,21 @@ export default {
     },
     theCustomer: function () {
       return {
-
         id_ordinateur: this.ordinateur.id,
         date: this.date,
         horaire: this.horaire,
-        id_client: _.isNumber(this.client.id) ? this.client.id : '',
+        id_client: typeof (this.client.id) ? this.client.id : '',
         name: this.name,
-        firstname: this.firstname
-
       };
     },
     formattedClient: function (client) {
       return {
         id: client.id,
         name: client.name,
-        firstname: client.firstname,
-        composed: client.name + " " + client.firstname
       }
     },
     isValid() {
-      return !_.isEmpty(this.client) || (!_.isEmpty(this.name) && !_.isEmpty(this.firstname))
+      return !_.isEmpty(this.client) || (!_.isEmpty(this.name))
     }
   },
   computed: {

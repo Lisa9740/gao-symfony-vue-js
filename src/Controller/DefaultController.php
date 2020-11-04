@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Attribution;
 use App\Entity\Computer;
 use App\Repository\AttributionRepository;
 use App\Repository\ComputerRepository;
+use App\Repository\CustomerRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,5 +90,44 @@ class DefaultController extends AbstractController
     public function ComputerDelete()
     {
 
+    }
+    /**
+     * @Route("/api/attributions", name="attribution_create", methods={"POST"})
+     */
+    public function getAttribution(Request $request, CustomerRepository  $customerRepository, ComputerRepository $computerRepository, SerializerInterface $serializer): Response
+    {
+        $attribution = new Attribution();
+        $data = json_decode($request->getContent(), true);
+
+        $customer = $customerRepository->find($data['id_client']);
+        $computer = $computerRepository->find($data['id_ordinateur']);
+        $attribution->setComputer($computer);
+        $attribution->setCustomer($customer);
+        $attribution->setHour($data['horaire']);
+
+        $date = DateTime::createFromFormat('Y-m-d', $data['date']);
+        $attribution->setDate($date);
+
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($attribution);
+        $entityManager->flush();
+
+        $attributionData['attribution'] = [
+            'id' => $attribution->getId(),
+            'customer' => $attribution->getCustomer(),
+            'computer' => $attribution->getComputer(),
+            'date' => $attribution->getDate(),
+            'hour' => $attribution->getHour()
+            ];
+
+        $computerData[] = [
+            "id" => $attribution->getId(),
+            'hour' => $attribution->getHour(),
+            'customer' => $attribution->getCustomer()->getFirstName() . " " . $attribution->getCustomer()->getLastName(),
+        ];
+
+        $json = $serializer->serialize($computerData, 'json');
+        return new Response($json);
     }
 }
