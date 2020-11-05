@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Attribution;
 use App\Entity\Computer;
+use App\Entity\Customer;
 use App\Repository\AttributionRepository;
 use App\Repository\ComputerRepository;
 use App\Repository\CustomerRepository;
@@ -29,19 +30,28 @@ class DefaultController extends AbstractController
     /**
      * @Route("/api/computers", name="computers_list", methods={"GET"})
      */
-    public function ComputerList(ComputerRepository $computerRepository, SerializerInterface $serializer, AttributionRepository $attributionRepository)
+    public function ComputerList(Request $request, ComputerRepository $computerRepository, SerializerInterface $serializer, AttributionRepository $attributionRepository)
     {
+
+        $date = $request->query->get('date');
+
         $computers = $computerRepository->findAll();
         $computerData = [];
         foreach ($computers as $computer){
         $attributions = [];
 
             foreach ($computer->getAttributions() as $computerAttr){
-                $attributions[] = [
-                    "id" => $computerAttr->getId(),
-                    "customer" => $computerAttr->getCustomer()->getFirstName() . " " . $computerAttr->getCustomer()->getLastName() ,
-                    "hour" => $computerAttr->getHour()
-                ];
+                $attributionDate = $computerAttr->getDate()->format('Y-m-d');
+
+              if ($date === $attributionDate){
+                    $attributions[] = [
+                        "id" => $computerAttr->getId(),
+                        "customer" => $computerAttr->getCustomer()->getFirstName() . " " . $computerAttr->getCustomer()->getLastName() ,
+                        "hour" => $computerAttr->getHour(),
+                        "date" => $attributionDate
+                    ];
+              }
+
             }
 
             $computerData[] = [
@@ -79,7 +89,6 @@ class DefaultController extends AbstractController
 
         ];
 
-
         $json = $serializer->serialize($computerData, 'json');
         return new Response($json);
     }
@@ -99,35 +108,52 @@ class DefaultController extends AbstractController
         $attribution = new Attribution();
         $data = json_decode($request->getContent(), true);
 
-        $customer = $customerRepository->find($data['id_client']);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        if (!isset($data['id_client'])){
+            $customer = new Customer();
+            $customer->setFirstName($data['firstname'])
+                     ->setLastName($data['lastname']);
+            $entityManager->persist($customer);
+        }else {
+            $customer = $customerRepository->find($data['id_client']);
+        }
+
         $computer = $computerRepository->find($data['id_ordinateur']);
-        $attribution->setComputer($computer);
-        $attribution->setCustomer($customer);
-        $attribution->setHour($data['horaire']);
+        $attribution->setComputer($computer)
+                    ->setCustomer($customer)
+                    ->setHour($data['horaire']);
 
         $date = DateTime::createFromFormat('Y-m-d', $data['date']);
         $attribution->setDate($date);
 
 
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($attribution);
         $entityManager->flush();
-
-        $attributionData['attribution'] = [
-            'id' => $attribution->getId(),
-            'customer' => $attribution->getCustomer(),
-            'computer' => $attribution->getComputer(),
-            'date' => $attribution->getDate(),
-            'hour' => $attribution->getHour()
-            ];
 
         $computerData[] = [
             "id" => $attribution->getId(),
             'hour' => $attribution->getHour(),
+            'date' => $attribution->getDate(),
             'customer' => $attribution->getCustomer()->getFirstName() . " " . $attribution->getCustomer()->getLastName(),
         ];
 
         $json = $serializer->serialize($computerData, 'json');
         return new Response($json);
+    }
+
+    /**
+     * @Route("/api/attributions/remove", name="attribution_delete")
+     * @return Response
+     */
+    public function remove(Request $request, AttributionRepository $attributionRepository)
+    {
+        $data = json_decode($request->getContent(), true);
+        $attribution = $attributionRepository->find($data['id']);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($attribution);
+        $entityManager->flush();
+
+        return new Response('ok');
     }
 }

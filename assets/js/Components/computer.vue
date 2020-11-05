@@ -13,7 +13,7 @@
                 </span>
         </v-col>
         <v-col cols="2">
-<!--          <RemoveAttribution v-if="horaire.attribution" :ordinateur="ordinateur" :attribution="horaire.attribution" :horaire="horaire.index" @removeAttribution="removeAttribution" />-->
+       <RemoveAttribution v-if="horaire.attribution" :ordinateur="ordinateur" :attribution="horaire.attribution" :horaire="horaire.index" @removeAttribution="removeAttribution" />
 
           <AddAttribution v-if="!horaire.attribution" :ordinateur="ordinateur" :horaire="horaire.index" :date="date" @addAttribution="addAttribution" />
         </v-col>
@@ -23,6 +23,8 @@
 </template>
 <script>
 import AddAttribution from './addattribution.vue'
+import RemoveAttribution from './removeattribution'
+
 export default {
   props: {
     ordinateur: {
@@ -32,24 +34,29 @@ export default {
       required: true
     },
   },
+  watch: {
+    ordinateur: function () {
+      this.initialise();
+    }
+  },
   components: {
     AddAttribution,
+    RemoveAttribution
   },
   data() {
     return {
+
       horaires: [],
       attributions: {}
     }
   },
-  computed: {
-  },
   created() {
-
     this.initialise();
+  },
+  computed: {
   },
   methods : {
       initialise() {
-        console.log(this.ordinateur)
           for (let i=0; i < this.ordinateur.attributions.length; i++) {
             let attribution = this.ordinateur.attributions[i]
             this.attributions[attribution.hour] = {
@@ -57,7 +64,6 @@ export default {
               name: attribution.customer,
             }
           }
-
         this.buildHoraires();
       },
       buildHoraires() {
@@ -74,10 +80,10 @@ export default {
       this.ordinateur.attributions.push(attribution)
       this.initialise();
     },
-    // removeAttribution: function(horaire){
-    //   _.unset(this.attributions,horaire)
-    //   this.buildHoraires();
-    // }
+    removeAttribution: function(horaire){
+      _.unset(this.attributions,horaire)
+      this.buildHoraires();
+    }
   }
 }
 </script>

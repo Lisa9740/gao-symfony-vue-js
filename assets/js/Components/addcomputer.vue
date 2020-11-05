@@ -52,7 +52,6 @@ export default {
         };
         axios.post('/api/computers/create', data)
             .then(({ data }) => {
-              console.log(data)
               this.$emit('add', data)
               this.dialog = false
             })

@@ -1,11 +1,6 @@
 <template>
   <div>
     <v-app>
-<!--      <v-main>-->
-<!--        <v-container>Hello world-->
-<!--        <Computer />-->
-<!--        </v-container>-->
-<!--      </v-main>-->
       <v-container>
         <v-row>
           <v-col cols="12" sm="8" md="4">
@@ -17,7 +12,7 @@
             </v-menu>
           </v-col>
         </v-row>
-        <addOrdinateur @add="addOrdinateur"/>
+        <addOrdinateur @addOrdinateur="addOrdinateur"/>
         <v-row>
           <v-col cols="12" sm="6" md="4" v-for="(ordinateur, key) in ordinateurs" :key="key">
             <Computer :ordinateur="ordinateur" :date="date"></Computer>
@@ -33,7 +28,6 @@ import Computer from '../Components/computer.vue'
 import AddOrdinateur from '../Components/addcomputer.vue'
 
 export default {
-  name : 'example',
   components: {
     Computer, AddOrdinateur
   },
@@ -44,7 +38,6 @@ export default {
       menuDate: false,
     }
   },
-
   computed: {
   },
   created() {
@@ -54,10 +47,10 @@ export default {
   methods: {
     initialize: function () {
       this.ordinateurs = [];
-      axios.get('/api/computers')
+      axios.get('/api/computers',  { params: { date : this.date } } )
           .then(({data}) => {
-            this.ordinateurs = data;
-            console.log(data);
+            this.ordinateurs = data.data;
+            // console.log("recupération des ordis" , data.data)
           }).catch(error => {
         console.log(error);
       });
@@ -67,7 +60,5 @@ export default {
     },
   }
 }
-
 </script>
-<style scoped>
-</style>
+

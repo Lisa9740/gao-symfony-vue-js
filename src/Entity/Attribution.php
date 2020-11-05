@@ -89,4 +89,5 @@ class Attribution
 
         return $this;
     }
+
 }

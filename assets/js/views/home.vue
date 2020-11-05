@@ -54,10 +54,11 @@ export default {
   methods: {
     initialize: function () {
       this.ordinateurs = [];
-      axios.get('/api/computers')
+      axios.get('/api/computers',  { params: { date : this.date } } )
           .then(({data}) => {
+            console.log("date" , this.date )
             this.ordinateurs = data;
-            console.log(data);
+             console.log("recupération des ordis" , data)
           }).catch(error => {
         console.log(error);
       });

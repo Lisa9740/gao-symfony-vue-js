@@ -25,7 +25,7 @@
 
           <v-row v-if="ajouter">
             <v-col cols="12" md="6">
-              <v-text-field v-model="name" color="success" label="Nom : " required />
+              <v-text-field v-model="lastname" color="success" label="Nom : " required />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field v-model="firstname" color="success" label="Prénom : " required />
@@ -64,6 +64,7 @@ export default {
     return {
       name: '',
       firstname: '',
+      lastname : '',
       ajouter: false,
       client: {},
       dialog: false,
@@ -95,6 +96,7 @@ export default {
   methods: {
     init: function () {
       this.name = ''
+      this.lastname = ''
       this.firstname = ''
       this.ajouter = false
       this.client = {}
@@ -104,7 +106,7 @@ export default {
       if (this.isValid()) {
         axios.post('/api/attributions', this.theCustomer())
             .then(({ data }) => {
-              this.$emit('addAttribution', data)
+              this.$emit('addAttribution', data[0])
               this.dialog = false
             })
             .catch(error => {
@@ -121,6 +123,8 @@ export default {
         horaire: this.horaire,
         id_client: typeof (this.client.id) ? this.client.id : '',
         name: this.name,
+        firstname: this.firstname,
+        lastname: this.lastname
       };
     },
     formattedClient: function (client) {
@@ -130,7 +134,7 @@ export default {
       }
     },
     isValid() {
-      return !_.isEmpty(this.client) || (!_.isEmpty(this.name))
+      return ((!_.isEmpty(this.client)) || (!_.isEmpty(this.firstname)) || (!_.isEmpty(this.lastname)))
     }
   },
   computed: {
