@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Example from './js/Components/home.vue'
+import Example from './js/views/Home.vue'
 import Routes from './route.js'
 import Layout from './js/layout/layout.vue';
 import Vuetify from "vuetify";

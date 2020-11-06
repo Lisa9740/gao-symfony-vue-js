@@ -8,16 +8,14 @@
     </template>
     <v-card>
       <v-card-title>
-        {{ ordinateur.name }} : Suppression d'une attribution pour
+        {{ computer.name }} : Suppression d'une attribution pour
         {{ horaire }}h
       </v-card-title>
-
       <v-card-text>
         <v-container>
-
                 <span>
                     Souhaitez vous supprimer l'attribution de l'ordinateur
-                    {{ ordinateur.name }} à {{ attribution.name }}
+                    {{ computer.name }} à {{ attribution.name }}
                     {{ attribution.firstname }} à {{ horaire }}h ?
                 </span>
         </v-container>
@@ -31,42 +29,4 @@
     </v-card>
   </v-dialog>
 </template>
-<script>
-import axios from 'axios';
-import _ from 'lodash';
-export default {
-  props: {
-    ordinateur: {
-      required: true
-    },
-    horaire: {
-      required: true
-    },
-    attribution: {
-      required: true
-    },
-  },
-  data() {
-    return {
-      dialog: false,
-    }
-  },
-  methods: {
-    supprimer: function () {
-      const data = {
-        id: this.attribution.id,
-      };
-      axios.post('/api/attributions/remove', data)
-          .then(({ data }) => {
-            this.$emit('removeAttribution', this.horaire)
-            this.dialog = false
-          })
-          .catch(error => {
-            //TODO catch error
-            console.log(error);
-          });
-
-    },
-  }
-}
-</script>
+<script src="./RemoveAttribution.js"></script>
