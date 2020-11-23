@@ -11,9 +11,11 @@ Ce projet utilise les technologies suivantes :
 ## Initialisation du projet
 
 Après avoir fait un git clone de ce projet, vous devez effectué les actions suivantes :
+
     -  composer install
     
   Pour obtenir les données :
-    - php bin/console db:migrate
-    - php bin/console d:f:l
+  
+    -  php bin/console db:migrate
+    -  php bin/console d:f:l
   
