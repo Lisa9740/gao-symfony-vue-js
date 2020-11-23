@@ -5,10 +5,15 @@ La conception et le développement de ce projet s'est effectué dans le cadre de
 
 Ce projet utilise les technologies suivantes :
 
-    backend : NodeJS (API)
+    backend : Symfony
     frontend : VueJS
 
-Pour l'initialisation, vous devez vérifier si vous avez bien sequelize-cli et nodemon d'installer. Si ce n'est pas le cas, vous pouvez exécuter les commandes suivantes :
+## Initialisation du projet
 
-    npm install -g nodemon
-    npm install -g sequelize-cli
+Après avoir fait un git clone de ce projet, vous devez effectué les actions suivantes :
+    -  composer install
+    
+  Pour obtenir les données :
+    - php bin/console db:migrate
+    - php bin/console d:f:l
+  
