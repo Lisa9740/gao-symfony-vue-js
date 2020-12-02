@@ -16,6 +16,6 @@ Après avoir fait un git clone de ce projet, vous devez effectué les actions su
     
   Pour obtenir les données :
   
-    -  php bin/console db:migrate
+    -  php bin/console d:m:m
     -  php bin/console d:f:l
   
