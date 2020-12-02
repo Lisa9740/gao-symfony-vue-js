@@ -19,3 +19,7 @@ Après avoir fait un git clone de ce projet, vous devez effectué les actions su
     -  php bin/console d:m:m
     -  php bin/console d:f:l
   
+## TODO 
+
+    - ajouter login 
+    - supprimer un ordinateur
