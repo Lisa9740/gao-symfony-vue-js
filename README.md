@@ -13,11 +13,11 @@ Ce projet utilise les technologies suivantes :
 Après avoir fait un git clone de ce projet, vous devez effectué les actions suivantes :
 
     -  composer install
-    
-  Pour obtenir les données :
-  
     -  php bin/console d:m:m
     -  php bin/console d:f:l
+    
+    - créer fichier .env à partir .env.example
+
     - yarn install
     - yarn encore dev --watch
     - symfony serve
