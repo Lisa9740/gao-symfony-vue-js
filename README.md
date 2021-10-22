@@ -18,9 +18,12 @@ Après avoir fait un git clone de ce projet, vous devez effectué les actions su
   
     -  php bin/console d:m:m
     -  php bin/console d:f:l
+    - yarn install
+    - yarn encore dev --watch
+    - symfony serve
   
 ## TODO 
 
     - ajouter login 
     - supprimer un ordinateur
-test
+    - ajouter pagination 
